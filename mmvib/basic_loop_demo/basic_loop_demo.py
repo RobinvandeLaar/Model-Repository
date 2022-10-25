@@ -74,7 +74,8 @@ def subroutine_end(self, **kwargs):
 # DAG Specification
 dag = DAG('basic_loop',
           default_args=default_args,
-          schedule_interval=None)
+          schedule_interval=None,
+          tags=["MMvIB","Loop"])
 
 
 # Task Specification

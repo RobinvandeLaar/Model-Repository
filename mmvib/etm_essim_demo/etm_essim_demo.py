@@ -185,7 +185,8 @@ def subroutine_finalize(self, **kwargs):
 # DAG Specification
 dag = DAG('etm_essim_demo',
           default_args=default_args,
-          schedule_interval=None)
+          schedule_interval=None,
+          tags=["MMvIB","ETM","ESSIM"])
 
 
 # Task Specification
