@@ -35,8 +35,11 @@ def subroutine_initialize(self, *args, **kwargs):
     task_instance = kwargs['task_instance']
     task_id = kwargs['task'].task_id
 
-    # Check if all models are available in task list
-    registry = kwargs['dag_run'].conf['model_registry']
+    # Set base path XCOM for workflow
+    metadata = kwargs['dag_run'].conf['metadata']
+
+    # Check if all models are available in task list TODO: optimise conf calls
+    registry = kwargs['dag_run'].conf['modules']['model_registry']
 
     try:
         r = requests.get(registry)
@@ -108,7 +111,7 @@ def subroutine_computation(self, **kwargs):
     api_id = kwargs['dag_run'].conf['tasks'][task_id]['api_id']
 
     # Get API addr through registry request
-    registry = kwargs['dag_run'].conf['model_registry']
+    registry = kwargs['dag_run'].conf['modules']['model_registry']
     model_request = {'name': api_id}
 
     try:
@@ -129,12 +132,16 @@ def subroutine_computation(self, **kwargs):
 
     logging.info('Using model ' + str(api_id) + ' located at ' + str(api_addr))
 
+    # Get experiment metadata
+    metadata = kwargs['dag_run'].conf['metadata']
+
     # Get experiment model config
     config = kwargs['dag_run'].conf['tasks'][task_id]['model_config']
 
     # Initialize Model Handler
     rest_handler = RestHandler(api_addr=api_addr,
                                task_instance=task_instance,
+                               metadata=metadata,
                                config=config,
                                logger=logging,
                                timeout=0) # disable timeout, as some essim simulations take longer than 60s
@@ -186,7 +193,7 @@ def subroutine_finalize(self, **kwargs):
 dag = DAG('etm_essim_demo',
           default_args=default_args,
           schedule_interval=None,
-          tags=["MMvIB","ETM","ESSIM"])
+          tags=["MMvIB","ESDL","ETM","ESSIM"])
 
 
 # Task Specification
