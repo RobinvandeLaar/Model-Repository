@@ -23,6 +23,87 @@ import json
 import sys
 import os
 
+#from conf import default
+default_params = {
+    "metadata": {
+        "user": "mmvib",
+        "project": "tholen",
+        "scenario": "v04-26kw",
+        "experiment": "Trial_1",
+        "run": "MM_workflow_run_1"
+    },
+    "modules": {
+        "model_registry": "http://mmvib-registry:9200/registry/"
+    },
+    "databases": {
+        "Minio": {
+            "api_addr": "minio:9000",
+            "db_config": {
+                "secure": 'false',
+                "access_key": "admin",
+                "secret_key": "password"
+            }
+        },
+        "Influx": {
+            "api_addr": "influxdb:8086",
+            "db_config": {
+                "db_name": "energy_profiles",
+                "use_ssl": 'false'
+            }
+        }
+    },
+    "tasks": {
+        "TEACOS_Iteration_{}": {
+            "type": "computation",
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/Tholen-simple v04-26kW_output.esdl",
+                "output_esdl_file_path": "test/{}/TEACOS_output.esdl"
+            }
+        },
+        "ESSIM_Iteration_{}": {
+            "type": "computation",
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "user": "essim",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "influxURL": "http://influxdb:8086",
+                    "grafanaURL": "http://grafana:3000",
+                    "natsURL": "nats://nats:4222",
+                    "kpiModule": {
+                        "modules": [{
+                            "id": "TotalEnergyProductionID",
+                            "config": {
+                                "scope": "Total"
+                            }
+                        }]
+                    }
+                },
+                "input_esdl_file_path": "test/{}/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/{}/ESSIM_output.esdl",
+                "output_file_path": "test/{}/KPIs.json"
+            }
+        },
+        "ETM_KPIs": {
+            "type": "computation",
+            "api_id": "ETM_KPIS",
+            "model_config": {
+                "input_esdl_file_path": "test/{}/ESSIM_output.esdl",
+                "output_file_path": "test/ETM_KPIs.esdl",
+                "scenario_ID": 2187862,
+                "KPI_area": "Nederland",
+                "etm_config": {
+                    "path": "https://beta-esdl.energytransitionmodel.com/api/v1/",
+                    "endpoint": "kpis"
+                }
+            }
+        }
+    }
+}
 
 default_args = {
     "owner": "airflow",
@@ -209,9 +290,13 @@ def subroutine_computation(self, **kwargs):
 def subroutine_finalize(self, **kwargs):
     return None
 
+#with open('default_config.json') as json_file:
+#    default_params = json.load(json_file)
+
 # DAG Specification
 with DAG('mmvib_micro_case',
           default_args=default_args,
+          params=default_params,
           schedule_interval=None,
           tags=["MMvIB","ESDL","ETM","ESSIM", "TEACOS"]) as dag:
 

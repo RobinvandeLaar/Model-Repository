@@ -23,6 +23,100 @@ import json
 import sys
 import os
 
+default_params = {
+    "metadata": {
+        "experiment": "Trial_1_Meso",
+        "project": "meso",
+        "run": "MM_workflow_run_1",
+        "scenario": "pv",
+        "user": "mmvib"
+    },
+    "modules": {
+        "model_registry": "http://mmvib-registry:9200/registry/"
+    },
+    "databases": {
+        "Influx": {
+            "api_addr": "influxdb:8086",
+            "db_config": {
+                "db_name": "energy_profiles",
+                "use_ssl": 'false'
+            }
+        },
+        "Minio": {
+            "api_addr": "minio:9000",
+            "db_config": {
+                "access_key": "admin",
+                "secret_key": "password",
+                "secure": 'false'
+            }
+        }
+    },
+    "tasks": {
+        "CTM_ETM_Iteration_1": {
+            "api_id": "CTM",
+            "model_config": {
+                "base_path": "meso",
+                "ctm_config": {
+                    "CTM_scenario_ID": "base",
+                    "ETM_scenario_ID": "13579",
+                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
+                },
+                "input_esdl_file_path": "meso/output_file_3.esdl",
+                "output_esdl_file_path": "meso/output_file_4.esdl"
+            },
+            "type": "computation"
+        },
+        "CTM_Model": {
+            "api_id": "CTM",
+            "model_config": {
+                "ctm_config": {
+                    "CTM_scenario_ID": "base",
+                    "ETM_scenario_ID": "13579",
+                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
+                },
+                "input_esdl_file_path": "meso/input_file.esdl",
+                "output_esdl_file_path": "meso/output_file_1.esdl"
+            },
+            "type": "computation"
+        },
+        "ETM_Iteration_1": {
+            "api_id": "CTM",
+            "model_config": {
+                "base_path": "meso",
+                "ctm_config": {
+                    "CTM_scenario_ID": "base",
+                    "ETM_scenario_ID": "13579",
+                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
+                },
+                "input_esdl_file_path": "output_file_4.esdl",
+                "output_esdl_file_path": "output_file_5.esdl"
+            },
+            "type": "computation"
+        },
+        "ETM_Model": {
+            "api_id": "ETM_KPIS",
+            "model_config": {
+                "KPI_area": "Nederland",
+                "etm_config": {
+                    "endpoint": "kpis",
+                    "path": "https://beta-esdl.energytransitionmodel.com/api/v1/"
+                },
+                "input_esdl_file_path": "meso/output_file_1.esdl",
+                "output_file_path": "meso/output_file_2.esdl",
+                "scenario_ID": 13579
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_1": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "meso/output_file_2.esdl",
+                "output_esdl_file_path": "meso/output_file_3.esdl"
+            },
+            "type": "computation"
+        }
+    }
+}
 
 default_args = {
     "owner": "airflow",
@@ -211,6 +305,7 @@ def subroutine_finalize(self, **kwargs):
 # DAG Specification
 with DAG('mmvib_meso_case',
           default_args=default_args,
+          params=default_params,
           schedule_interval=None,
           tags=["MMvIB","ESDL","CTM","ETM", "TEACOS"]) as dag:
 

@@ -1,0 +1,220 @@
+{
+    "metadata": {
+        "experiment": "Trial_1",
+        "project": "tholen",
+        "run": "MM_workflow_run_1",
+        "scenario": "v04-26kw",
+        "user": "mmvib"
+    },
+    "modules": {
+        "model_registry": "http://mmvib-registry:9200/registry/"
+    },
+    "databases": {
+        "Influx": {
+            "api_addr": "influxdb:8086",
+            "db_config": {
+                "db_name": "energy_profiles",
+                "use_ssl": false
+            }
+        },
+        "Minio": {
+            "api_addr": "minio:9000",
+            "db_config": {
+                "access_key": "admin",
+                "secret_key": "password",
+                "secure": false
+            }
+        }
+    },
+    "tasks": {
+        "ESSIM_Iteration_1": {
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "grafanaURL": "http://grafana:3000",
+                    "influxURL": "http://influxdb:8086",
+                    "kpiModule": {
+                        "modules": [{
+                            "config": {
+                                "scope": "Total"
+                            },
+                            "id": "TotalExportedEnergyID"
+                        }]
+                    },
+                    "natsURL": "nats://nats:4222",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "user": "essim"
+                },
+                "input_esdl_file_path": "test/1/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/1/ESSIM_output.esdl",
+                "output_file_path": "test/1/KPIs.json"
+            },
+            "type": "computation"
+        },
+        "ESSIM_Iteration_2": {
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "grafanaURL": "http://grafana:3000",
+                    "influxURL": "http://influxdb:8086",
+                    "kpiModule": {
+                        "modules": [{
+                            "config": {
+                                "scope": "Total"
+                            },
+                            "id": "TotalExportedEnergyID"
+                        }]
+                    },
+                    "natsURL": "nats://nats:4222",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "user": "essim"
+                },
+                "input_esdl_file_path": "test/2/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/2/ESSIM_output.esdl",
+                "output_file_path": "test/2/KPIs.json"
+            },
+            "type": "computation"
+        },
+        "ESSIM_Iteration_3": {
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "grafanaURL": "http://grafana:3000",
+                    "influxURL": "http://influxdb:8086",
+                    "kpiModule": {
+                        "modules": [{
+                            "config": {
+                                "scope": "Total"
+                            },
+                            "id": "TotalExportedEnergyID"
+                        }]
+                    },
+                    "natsURL": "nats://nats:4222",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "user": "essim"
+                },
+                "input_esdl_file_path": "test/3/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/3/ESSIM_output.esdl",
+                "output_file_path": "test/3/KPIs.json"
+            },
+            "type": "computation"
+        },
+        "ESSIM_Iteration_4": {
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "grafanaURL": "http://grafana:3000",
+                    "influxURL": "http://influxdb:8086",
+                    "kpiModule": {
+                        "modules": [{
+                            "config": {
+                                "scope": "Total"
+                            },
+                            "id": "TotalExportedEnergyID"
+                        }]
+                    },
+                    "natsURL": "nats://nats:4222",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "user": "essim"
+                },
+                "input_esdl_file_path": "test/4/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/4/ESSIM_output.esdl",
+                "output_file_path": "test/4/KPIs.json"
+            },
+            "type": "computation"
+        },
+        "ESSIM_Iteration_5": {
+            "api_id": "ESSIM",
+            "model_config": {
+                "essim_post_body": {
+                    "endDate": "2019-01-01T23:00:00+0100",
+                    "grafanaURL": "http://grafana:3000",
+                    "influxURL": "http://influxdb:8086",
+                    "kpiModule": {
+                        "modules": [{
+                            "config": {
+                                "scope": "Total"
+                            },
+                            "id": "TotalExportedEnergyID"
+                        }]
+                    },
+                    "natsURL": "nats://nats:4222",
+                    "scenarioID": "essim_mmvib_adapter_test",
+                    "simulationDescription": "ESSIM MMvIB adapter test",
+                    "startDate": "2019-01-01T00:00:00+0100",
+                    "user": "essim"
+                },
+                "input_esdl_file_path": "test/5/TEACOS_output.esdl",
+                "output_esdl_file_path": "test/5/ESSIM_output.esdl",
+                "output_file_path": "test/5/KPIs.json"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_1": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/Tholen-simple v04.esdl",
+                "output_esdl_file_path": "test/1/TEACOS_output.esdl"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_2": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/1/ESSIM_output.esdl",
+                "output_esdl_file_path": "test/2/TEACOS_output.esdl"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_3": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/2/ESSIM_output.esdl",
+                "output_esdl_file_path": "test/3/TEACOS_output.esdl"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_4": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/3/ESSIM_output.esdl",
+                "output_esdl_file_path": "test/4/TEACOS_output.esdl"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_5": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "test/4/ESSIM_output.esdl",
+                "output_esdl_file_path": "test/5/TEACOS_output.esdl"
+            },
+            "type": "computation"
+        },
+        "ETM_KPIs": {
+            "api_id": "ETM_KPIS",
+            "model_config": {
+                "KPI_area": "Nederland",
+                "etm_config": {
+                    "endpoint": "kpis",
+                    "path": "https://beta-esdl.energytransitionmodel.com/api/v1/"
+                },
+                "input_esdl_file_path": "test/5/ESSIM_output.esdl",
+                "output_file_path": "test/Tholen-simple v04_ETM_KPIs.esdl",
+                "scenario_ID": 2187862
+            },
+            "type": "computation"
+        }
+    }
+}
