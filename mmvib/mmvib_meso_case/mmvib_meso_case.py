@@ -28,7 +28,7 @@ default_params = {
         "experiment": "Trial_1_Meso",
         "project": "meso",
         "run": "MM_workflow_run_1",
-        "scenario": "pv",
+        "scenario": "Tholen",
         "user": "mmvib"
     },
     "modules": {
@@ -74,22 +74,8 @@ default_params = {
                     "ETM_scenario_ID": "13579",
                     "endpoint": "https://beta.carbontransitionmodel.com/api/"
                 },
-                "input_esdl_file_path": "meso/input_file.esdl",
+                "input_esdl_file_path": "meso/Tholen-simple v04-26kW_output.esdl",
                 "output_esdl_file_path": "meso/output_file_1.esdl"
-            },
-            "type": "computation"
-        },
-        "ETM_Iteration_1": {
-            "api_id": "CTM",
-            "model_config": {
-                "base_path": "meso",
-                "ctm_config": {
-                    "CTM_scenario_ID": "base",
-                    "ETM_scenario_ID": "13579",
-                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
-                },
-                "input_esdl_file_path": "output_file_4.esdl",
-                "output_esdl_file_path": "output_file_5.esdl"
             },
             "type": "computation"
         },
@@ -169,22 +155,6 @@ def subroutine_initialize(self, *args, **kwargs):
         logging.info("ERROR: Not all models available in " + task_id + " , missing: " + str(model_inventory))
 
     return None
-
-# Handle Loop Condition
-def subroutine_loop(self, **kwargs):
-
-
-    # params:
-    # DAG to loop (?) -> with param set
-    # loop condition
-
-    # >>> in-place loop instead of recursion 
-    # the task/handler manages the loop conditions (input/output structure)
-
-
-
-    return None
-
 
 # Generic Database Transaction Interface Task Specification
 def subroutine_transaction(self, **kwargs):
@@ -284,7 +254,6 @@ def subroutine_computation(self, **kwargs):
                                    str(config) + "timed out (" + str(rest_handler.timeout) + "s)")
 
     # Collect Model Results
-    # response = rest_handler.get_model_results(model_run_id)
     logging.info("RESP:" + str(response))
     if response['result'] is not None:
         model_result = response['result']['path']
@@ -347,14 +316,6 @@ with DAG('mmvib_meso_case',
                         python_callable=subroutine_computation,
                         op_args=['context'])
 
-
-            # t3 = PythonOperator(dag=dag,
-            #             task_id='ETM_Iteration_{}'.format(number),
-            #             python_callable=subroutine_computation,
-            #             op_args=['context'])
-
-            # t1 >> t2 >> t3
-
             t1 >> t2
 
         return tg1
@@ -363,7 +324,7 @@ with DAG('mmvib_meso_case',
     prev = None
     for i in range(1,iters+1):
         item = group(i)
-        Initialize >> CTM_Model >> ETM_Model >> item >> Finalize # add etm
+        Initialize >> CTM_Model >> ETM_Model >> item >> Finalize
         if prev is not None:
             prev >> item
             prev = item
