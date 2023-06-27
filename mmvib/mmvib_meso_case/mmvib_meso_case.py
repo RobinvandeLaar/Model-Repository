@@ -39,7 +39,7 @@ default_params = {
             "api_addr": "influxdb:8086",
             "db_config": {
                 "db_name": "energy_profiles",
-                "use_ssl": 'false'
+                "use_ssl": "false"
             }
         },
         "Minio": {
@@ -47,7 +47,7 @@ default_params = {
             "db_config": {
                 "access_key": "admin",
                 "secret_key": "password",
-                "secure": 'false'
+                "secure": "false"
             }
         }
     },
@@ -59,10 +59,24 @@ default_params = {
                 "ctm_config": {
                     "CTM_scenario_ID": "base",
                     "ETM_scenario_ID": "13579",
-                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
+                    "endpoint": "https://carbontransitionmodel.com/api/"
                 },
                 "input_esdl_file_path": "meso/output_file_3.esdl",
                 "output_esdl_file_path": "meso/output_file_4.esdl"
+            },
+            "type": "computation"
+        },
+        "CTM_ETM_Iteration_2": {
+            "api_id": "CTM",
+            "model_config": {
+                "base_path": "meso",
+                "ctm_config": {
+                    "CTM_scenario_ID": "base",
+                    "ETM_scenario_ID": "13579",
+                    "endpoint": "https://carbontransitionmodel.com/api/"
+                },
+                "input_esdl_file_path": "meso/output_file_5.esdl",
+                "output_esdl_file_path": "meso/output_file_6.esdl"
             },
             "type": "computation"
         },
@@ -72,7 +86,7 @@ default_params = {
                 "ctm_config": {
                     "CTM_scenario_ID": "base",
                     "ETM_scenario_ID": "13579",
-                    "endpoint": "https://beta.carbontransitionmodel.com/api/"
+                    "endpoint": "https://carbontransitionmodel.com/api/"
                 },
                 "input_esdl_file_path": "meso/Tholen-simple v04-26kW_output.esdl",
                 "output_esdl_file_path": "meso/output_file_1.esdl"
@@ -98,6 +112,14 @@ default_params = {
             "model_config": {
                 "input_esdl_file_path": "meso/output_file_2.esdl",
                 "output_esdl_file_path": "meso/output_file_3.esdl"
+            },
+            "type": "computation"
+        },
+        "TEACOS_Iteration_2": {
+            "api_id": "TEACOS",
+            "model_config": {
+                "input_esdl_file_path": "meso/output_file_4.esdl",
+                "output_esdl_file_path": "meso/output_file_5.esdl"
             },
             "type": "computation"
         }
@@ -292,7 +314,7 @@ with DAG('mmvib_meso_case',
 
     ETM_Model = PythonOperator(dag=dag,
                         task_id='ETM_Model',
-                        python_callable=subroutine_initialize,
+                        python_callable=subroutine_computation,
                         op_args=['context'])
 
     Finalize = PythonOperator(dag=dag,
@@ -320,7 +342,7 @@ with DAG('mmvib_meso_case',
 
         return tg1
 
-    iters = 1
+    iters = 2
     prev = None
     for i in range(1,iters+1):
         item = group(i)
