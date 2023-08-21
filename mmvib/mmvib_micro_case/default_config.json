@@ -165,7 +165,7 @@
         "TEACOS_Iteration_1": {
             "api_id": "TEACOS",
             "model_config": {
-                "input_esdl_file_path": "test/Tholen-simple v04.esdl",
+                "input_esdl_file_path": ["test/Tholen-simple v04.esdl"],
                 "output_esdl_file_path": "test/1/TEACOS_output.esdl"
             },
             "type": "computation"
